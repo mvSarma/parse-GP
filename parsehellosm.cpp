@@ -1,9 +1,11 @@
 #include <iostream>
-#include <vector>
+#include <cstdlib>
 #include <sys/time.h>
 #include <ctime>
-#include <ctime>
 #include <fstream>
+#include <csignal>
+#include <sstream>
+//#define TIMEIT
 
 using namespace std;
 
@@ -12,7 +14,6 @@ class ToBeParsed
 	private:
 	static int aa;				// already available
 	static ToBeParsed *tbp;			// Singleton class implementation
-	vector<char> v;
 	ToBeParsed(ToBeParsed &) {}		// suppressing copy constructor
 	
 	ToBeParsed& operator=(const ToBeParsed &);	// suppressing assignment operator
@@ -26,13 +27,6 @@ class ToBeParsed
 	static ToBeParsed* create(string);	// Static Factory Method
 	
 	bool parse(char);
-	
-	~ToBeParsed()
-	{
-		cout << "Destructing the object";
-		delete(tbp);
-		cout << endl << "success" << endl;
-	}
 };
 
 ToBeParsed* ToBeParsed::tbp = NULL;
@@ -50,15 +44,17 @@ inline ToBeParsed* ToBeParsed::create(string s)
 
 bool ToBeParsed::parse(char c)
 {
-	static int i, j;
+	static int i, j;	// i->to find the first character of the string to be parsed; j->traverses through all char of the string
 	switch(i)
 	{
 		 case 0:
 		 {
 			if (c == str.at(0))
 			{
-				 i=1;j=1;
-				 return false;
+				if(str.length() == 1)
+					return true;
+				i=1;j=1;
+				return false;
 		 	}
 		 	break;
 		 }
@@ -92,18 +88,38 @@ static timestamp_t get_timestamp ()
 	return  now.tv_usec + (timestamp_t)now.tv_sec * 1000000;
 }
 
+void handlectrl_c(int num)
+{
+	if(num == 2)
+		cout << endl << endl << "Got Ctrl^C!! exiting" << endl;
+	exit(num);
+}
+
 int main(int argc, char **argv)
 {
 	int abcd = 0;
 	timestamp_t t0;
 	ToBeParsed *tbp;
 	char c;
+	signal(SIGINT, handlectrl_c);  	// registering the signal
 	ifstream fp("input.txt");
 	if(argc == 1)				// In ubuntu 14.04, gcc. 'argc' may be 0 in some compilers or in other operating systems.
 		tbp = ToBeParsed::create("hello");
 	else
-		tbp = ToBeParsed::create(argv[1]);
-	t0 = get_timestamp();
+	{
+		stringstream ss;
+		for(int i=2 ; i<=argc ; i++)
+		{
+			ss << argv[i-1];
+			if(i != argc)
+				ss << " ";
+		}
+		tbp = ToBeParsed::create(ss.str());
+	}
+	cout << " " << tbp->str << " To be parsed of length " << tbp->str.length() << endl;
+	#ifdef TIMEIT
+		t0 = get_timestamp();
+	#endif
 	while(true)
 	{
 		//c = cin.get();
@@ -112,8 +128,14 @@ int main(int argc, char **argv)
 		if(getout)
 			break;
 	}
-	timestamp_t t1 = get_timestamp();
-	double secs = (t1 - t0) / 1000000.0L;
-	cout << endl << endl << "Thank You for your Participation !! " << tbp->str << " detected in " << secs << endl;
+	#ifdef TIMEIT
+		timestamp_t t1 = get_timestamp();
+		double secs = (t1 - t0) / 1000000.0L;
+	#endif
+	cout << endl << " " << tbp->str << " detected ";
+	#ifdef TIMEIT
+		cout << "in " << secs << " seconds";
+	#endif
+	cout << endl;
 	fp.close();
 }
