@@ -45,12 +45,12 @@ inline ToBeParsed* ToBeParsed::create(string s)
 
 bool ToBeParsed::parse(char c)
 {
-	static int i, j;	// i->to find the first character of the string to be parsed; j->traverses through all char of the string
+	static int i, j;	 
 	switch(i)
 	{
 		 case 0:
 		 {
-			if (c == str.at(0))
+			if (c == str.at(0))		// i->to find the first character of the string to be parsed;
 			{
 				if(str.length() == 1)
 					return true;
@@ -61,7 +61,7 @@ bool ToBeParsed::parse(char c)
 		 }
 		 case 1:
 		 {
-			 if(c == str.at(j))
+			 if(c == str.at(j))		//j->traverses through all char of the string
 			 {
 				i=1;j++;
 			 	if(j == str.length())
