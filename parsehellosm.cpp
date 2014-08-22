@@ -1,11 +1,12 @@
-#include <iostream>
-#include <cstdlib>
-#include <sys/time.h>
-#include <ctime>
-#include <fstream>
-#include <csignal>
-#include <sstream>
+#include <iostream>		//cout && cin
+#include <cstdlib>		//exit
+#include <sys/time.h>	//timevalue
+#include <ctime>		//  "
+#include <fstream>		//ifstream
+#include <csignal>		//signal
+#include <sstream>		//stringstream
 //#define TIMEIT
+#define FILEIN
 
 using namespace std;
 
@@ -91,13 +92,12 @@ static timestamp_t get_timestamp ()
 void handlectrl_c(int num)
 {
 	if(num == 2)
-		cout << endl << endl << "Got Ctrl^C!! exiting" << endl;
+		cout << endl << "Got Ctrl^C!! exiting" << endl;
 	exit(num);
 }
 
 int main(int argc, char **argv)
 {
-	int abcd = 0;
 	timestamp_t t0;
 	ToBeParsed *tbp;
 	char c;
@@ -122,8 +122,16 @@ int main(int argc, char **argv)
 	#endif
 	while(true)
 	{
-		//c = cin.get();
-		fp.get(c);
+		#ifdef FILEIN
+			fp.get(c);
+			if(fp.eof())
+			{
+				cout << endl << tbp->str << " not found" << endl;
+				exit(0);
+			}
+		#else
+			c = cin.get();
+		#endif
 		bool getout = tbp->parse(c);
 		if(getout)
 			break;
