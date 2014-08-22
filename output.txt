@@ -1,0 +1,25 @@
+rm -f osm
+g++ parsehellosm.cpp -o osm
+./osm
+ hello To be parsed of length 5
+ hello detected 
+
+./osm abcd
+ abcd To be parsed of length 4
+ abcd detected 
+
+./osm hella
+ hella To be parsed of length 5
+hella not found
+./osm q;
+ q To be parsed of length 1
+ q detected 
+
+./osm \;
+ ; To be parsed of length 1
+ ; detected 
+
+./osm hi hello how r u
+ hi hello how r u To be parsed of length 16
+ hi hello how r u detected 
+

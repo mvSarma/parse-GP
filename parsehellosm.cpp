@@ -126,7 +126,7 @@ int main(int argc, char **argv)
 			fp.get(c);
 			if(fp.eof())
 			{
-				cout << endl << tbp->str << " not found" << endl;
+				cout << tbp->str << " not found" << endl;
 				exit(0);
 			}
 		#else
@@ -140,10 +140,10 @@ int main(int argc, char **argv)
 		timestamp_t t1 = get_timestamp();
 		double secs = (t1 - t0) / 1000000.0L;
 	#endif
-	cout << endl << " " << tbp->str << " detected ";
+	cout << " " << tbp->str << " detected ";
 	#ifdef TIMEIT
 		cout << "in " << secs << " seconds";
 	#endif
-	cout << endl;
+	cout << endl << endl;
 	fp.close();
 }

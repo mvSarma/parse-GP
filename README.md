@@ -9,3 +9,4 @@ If you want to see the calculation time, uncomment line 8.
 If you are bored of giving inputs, press CTRL^C. The program will handle it.
 The doxygen html documentation is available in the .git folder.
 The state machine logic explanation is avaiable in logic.txt
+The output of make, for a set of inputs, is given in output.txt
