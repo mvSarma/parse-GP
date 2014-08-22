@@ -1,4 +1,4 @@
-osm: clean parsehellosm.cpp parsehellovec.cpp
+osm: clean parsehellosm.cpp
 	g++ parsehellosm.cpp -o osm
 	
 .PHONY: clean
